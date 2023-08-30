@@ -24,16 +24,21 @@ public class Program {
 		Reserva novaReserva = null;
 
 		Scanner input = new Scanner(System.in);
+		
+		boolean quartoNaoCadastrado;
+		boolean quartoJaCadastrado;
+		int editQuarto;
 		int menu;
 		int numQuarto;
 		final int cadQuarto = 1;
 		final int listQuartos = 2;
-		final int cadCliente = 3;
-		final int listClientes = 4;
-		final int cadReserva = 5;
-		final int listReserva = 6;
-		final int canReserva = 7;
-		final int sair = 8;
+		final int editQuartos = 3;
+		final int cadCliente = 4;
+		final int listClientes = 5;
+		final int cadReserva = 6;
+		final int listReserva = 7;
+		final int canReserva = 8;
+		final int sair = 9;
 		int tipoQuarto;
 		int id = 1;
 		int x = 0;
@@ -46,9 +51,12 @@ public class Program {
 		// Lista de opções do menu.
 
 		String[] dadosMenu = { "", "Digite 1 para cadastrar um quarto", "Digite 2 para listar os quartos cadastrados",
-				"Digite 3 para cadastrar um cliente", "Digite 4 para listar os clientes cadastrados",
-				"Digite 5 para realizar uma reserva", "Digite 6 para listar as reservas",
-				"Digite 7 para cancelar uma reserva", "Digite 8 para finalizar o programa" };
+				"Digite 3 para editar um quarto cadastrado", "Digite 4 para cadastrar um cliente",
+				"Digite 5 para listar os clientes cadastrados", "Digite 6 para realizar uma reserva",
+				"Digite 7 para listar as reservas", "Digite 8 para cancelar uma reserva",
+				"Digite 9 para finalizar o programa" };
+
+		// Menu com as opções para o usuário.
 
 		do {
 			System.out.println("Sistema hoteleiro");
@@ -64,7 +72,8 @@ public class Program {
 				System.out.println();
 			}
 
-			// Cadastro de quartos.
+			// Opção do menu 1 - cadastro de quartos, cadastra um novo quarto, com número,
+			// tipo (com opção em uma lista), e valor cobrado pelo quarto.
 
 			switch (menu) {
 			case (cadQuarto):
@@ -72,18 +81,20 @@ public class Program {
 				System.out.println("-------------------");
 
 				do {
+
+					quartoJaCadastrado = false;
+
 					System.out.print("Digite o número do quarto para cadastro: ");
 					numQuarto = input.nextInt();
 					System.out.println();
 					for (Quarto q : quartosCadastrados) {
 						if (numQuarto == q.getNumero()) {
-							x = 1;
+							quartoJaCadastrado = true;
 							System.out.println("Número de quarto já cadastrado, por favor verifique o número digitado!");
 							System.out.println();
-						} else
-							x = 2;
+						}
 					}
-				} while (x == 1);
+				} while (quartoJaCadastrado);
 
 				do {
 					System.out.println("Escolha o tipo do quarto para cadastro");
@@ -121,6 +132,39 @@ public class Program {
 					System.out.println(q.toString());
 				}
 				System.out.println();
+				break;
+
+			// Edição de quartos cadastrados
+
+			case (editQuartos):
+				do {
+					
+					quartoNaoCadastrado = false;
+					
+					System.out.println("Quartos cadastrados");
+					System.out.println("-------------------");
+					for (Quarto q : quartosCadastrados) {
+						System.out.println(q.toString());
+					}
+					System.out.println();
+					System.out.print("Escolha o número do quarto a ser editado:");
+					editQuarto = input.nextInt();
+					
+					for (Quarto q : quartosCadastrados) {
+						if (editQuarto != q.getNumero()) {
+							quartoNaoCadastrado = true;
+						}
+					}
+						if(quartoNaoCadastrado == true) {
+							System.out.println("Quarto não cadastrado, verifique por favor!");
+							System.out.println();
+						}else {
+							System.out.println("Deu certo");
+							System.out.println();
+						}
+						
+					
+				} while (quartoNaoCadastrado == true);
 				break;
 
 			// Cadastro de clientes.
@@ -209,7 +253,8 @@ public class Program {
 				gerenciadorReservas.addReserva(novaReserva);
 
 				System.out.println();
-				System.out.println("Reserva: " + cliente.getNomeCliente() + ", cadastrada com sucesso!");
+				System.out.println("Reserva: " + clienteReserva.getNomeCliente() + ", Quarto: "
+						+ quartoReserva.getNumero() + ", cadastrada com sucesso!");
 				System.out.println();
 				break;
 
