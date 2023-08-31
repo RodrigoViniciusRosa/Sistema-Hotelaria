@@ -15,7 +15,7 @@ public class Program {
 		Reserva gerenciadorReservas = new Reserva();
 
 		List<Quarto> quartosCadastrados = new ArrayList<>();
-		List<Cliente> clienteCadastrado = new ArrayList<>();
+		List<Cliente> clienteCadastrados = new ArrayList<>();
 
 		Cliente cliente = null;
 		Cliente clienteReserva = null;
@@ -23,10 +23,11 @@ public class Program {
 		Quarto quartoReserva = null;
 		Reserva novaReserva = null;
 		Quarto quartoParaEditar = null;
+		Cliente clienteParaEditar = null;
 
 		Scanner input = new Scanner(System.in);
-		
-		
+
+		boolean clienteCadastrado;
 		boolean quartoCadastrado;
 		int numeroEditQuarto;
 		int menu;
@@ -36,10 +37,11 @@ public class Program {
 		final int editQuartos = 3;
 		final int cadCliente = 4;
 		final int listClientes = 5;
-		final int cadReserva = 6;
-		final int listReserva = 7;
-		final int canReserva = 8;
-		final int sair = 9;
+		final int editClientes = 6;
+		final int cadReserva = 7;
+		final int listReserva = 8;
+		final int canReserva = 9;
+		final int sair = 10;
 		int tipoQuarto;
 		int id = 1;
 		int editTipoQuarto;
@@ -53,9 +55,9 @@ public class Program {
 
 		String[] dadosMenu = { "", "Digite 1 para cadastrar um quarto", "Digite 2 para listar os quartos cadastrados",
 				"Digite 3 para editar um quarto cadastrado", "Digite 4 para cadastrar um cliente",
-				"Digite 5 para listar os clientes cadastrados", "Digite 6 para realizar uma reserva",
-				"Digite 7 para listar as reservas", "Digite 8 para cancelar uma reserva",
-				"Digite 9 para finalizar o programa" };
+				"Digite 5 para listar os clientes cadastrados", "Digite 6 para editar um cliente cadastrado",
+				"Digite 7 para realizar uma reserva", "Digite 8 para listar as reservas",
+				"Digite 9 para cancelar uma reserva", "Digite 10 para finalizar o programa" };
 
 		// Menu com as opções para o usuário.
 
@@ -91,7 +93,8 @@ public class Program {
 					for (Quarto q : quartosCadastrados) {
 						if (numQuarto == q.getNumero()) {
 							quartoCadastrado = true;
-							System.out.println("Número de quarto já cadastrado, por favor verifique o número digitado!");
+							System.out
+									.println("Número de quarto já cadastrado, por favor verifique o número digitado!");
 							System.out.println();
 						}
 					}
@@ -139,9 +142,9 @@ public class Program {
 
 			case (editQuartos):
 				do {
-					
+
 					quartoCadastrado = false;
-					
+
 					System.out.println("Quartos cadastrados");
 					System.out.println("-------------------");
 					for (Quarto q : quartosCadastrados) {
@@ -149,57 +152,53 @@ public class Program {
 					}
 					System.out.println();
 					System.out.print("Escolha o número do quarto a ser editado:");
-					
+
 					numeroEditQuarto = input.nextInt();
-					
+
 					for (Quarto q : quartosCadastrados) {
 						if (numeroEditQuarto == q.getNumero()) {
 							quartoCadastrado = true;
 							quartoParaEditar = q;
 						}
 					}
-						
-						if(quartoCadastrado == false) {
+
+					if (quartoCadastrado == false) {
+						System.out.println();
+						System.out.println("Quarto não cadastrado, verifique por favor!");
+						System.out.println();
+
+					} else {
+						do {
 							System.out.println();
-							System.out.println("Quarto não cadastrado, verifique por favor!");
-							System.out.println();
-							
-						}else {
-							do {
-								System.out.println();
-								System.out.println("Escolha um novo tipo de quarto para cadastro");
-								System.out.println("--------------------------------------");
-								for (int i = 1; i < tiposQuarto.length; i++) {
-									System.out.println(i + " - " + tiposQuarto[i]);
-								}
-								editTipoQuarto = input.nextInt();
-								if (editTipoQuarto < 1 || editTipoQuarto > 6) {
-									System.out.println("Escolha um tipo de 1 a 6");
-									System.out.println();
-								}
-							} while (editTipoQuarto < 1 || editTipoQuarto > 6);
-							   
-							quartoParaEditar.setTipo(tiposQuarto[editTipoQuarto]);
-							
-							System.out.print("Digite uma nova descrição para o quarto:");
-							input.nextLine();
-							String editDescricaoQuarto = input.nextLine();
-							
-							
-							quartoParaEditar.setDescricao(editDescricaoQuarto);
-							
-							System.out.print("Digite um novo preço para o quarto:");
-							double editPrecoQuarto = input.nextDouble();
-							
-							quartoParaEditar.setPreco(editPrecoQuarto);
-							
-							for (Quarto q : quartosCadastrados) {
-								System.out.println(q.toString());
-							
+							System.out.println("Escolha um novo tipo de quarto para cadastro");
+							System.out.println("--------------------------------------");
+							for (int i = 1; i < tiposQuarto.length; i++) {
+								System.out.println(i + " - " + tiposQuarto[i]);
 							}
-						}
-						
-					
+							editTipoQuarto = input.nextInt();
+							if (editTipoQuarto < 1 || editTipoQuarto > 6) {
+								System.out.println("Escolha um tipo de 1 a 6");
+								System.out.println();
+							}
+						} while (editTipoQuarto < 1 || editTipoQuarto > 6);
+
+						quartoParaEditar.setTipo(tiposQuarto[editTipoQuarto]);
+
+						System.out.print("Digite uma nova descrição para o quarto:");
+						input.nextLine();
+						String editDescricaoQuarto = input.nextLine();
+
+						quartoParaEditar.setDescricao(editDescricaoQuarto);
+
+						System.out.print("Digite um novo preço para o quarto:");
+						double editPrecoQuarto = input.nextDouble();
+
+						quartoParaEditar.setPreco(editPrecoQuarto);
+
+						System.out.println("Quarto: " + quartoParaEditar.getNumero() + ", editado com sucesso!");
+
+					}
+
 				} while (quartoCadastrado == false);
 				break;
 
@@ -209,7 +208,7 @@ public class Program {
 				System.out.println("Cadastro de clientes");
 				System.out.println("--------------------");
 
-				for (Cliente c : clienteCadastrado) {
+				for (Cliente c : clienteCadastrados) {
 					id = c.getIdCliente();
 					id++;
 				}
@@ -222,7 +221,7 @@ public class Program {
 				System.out.print("Digite o telefone do cliente para cadastro (DD)00000-0000: ");
 				String telCliente = input.nextLine();
 				cliente = new Cliente(id, nomeCliente, telCliente);
-				clienteCadastrado.add(cliente);
+				clienteCadastrados.add(cliente);
 				System.out.println();
 				System.out.println("Cliente: " + cliente.getNomeCliente() + ", cadastrado com sucesso!");
 				System.out.println();
@@ -233,27 +232,75 @@ public class Program {
 			case (listClientes):
 				System.out.println("Clientes cadastrados");
 				System.out.println("--------------------");
-				for (Cliente c : clienteCadastrado) {
+				for (Cliente c : clienteCadastrados) {
 					System.out.println(c.toString());
 				}
 				System.out.println();
 				break;
 
-			// Reserva dos quartos.
+			// Edição de clientes cadastrados
+
+			case (editClientes):
+				do {
+					System.out.println("Clientes cadastrados");
+					System.out.println("--------------------");
+					for (Cliente c : clienteCadastrados) {
+						System.out.println(c.toString());
+					}
+					System.out.println();
+
+					clienteCadastrado = false;
+					System.out.print("Digite o Id do cliente a ser editado: ");
+					int idEditCliente = input.nextInt();
+					for (Cliente c : clienteCadastrados) {
+						if (idEditCliente == c.getIdCliente()) {
+							clienteCadastrado = true;
+							clienteParaEditar = c;
+							
+						}
+					}
+					if (clienteCadastrado == false) {
+						System.out.println();
+						System.out.println("Id do cliente não cadastrado, verifique por favor!");
+						System.out.println();
+					}
+
+				} while (clienteCadastrado == false);
+
+				System.out.print("Digite um novo nome para cadastro: ");
+				input.nextLine();
+				String editNomeCliente = input.nextLine();
+				
+				System.out.println();
+
+				clienteParaEditar.setNomeCliente(editNomeCliente);
+
+				System.out.print("Digite um novo telefone para cadastro: ");
+				String edtiTelCliente = input.nextLine();
+				
+				System.out.println();
+
+				clienteParaEditar.setTelCliente(edtiTelCliente);
+
+				System.out.println("Cliente: " + clienteParaEditar.getNomeCliente() + ", cadastrado com sucesso!");
+				System.out.println();
+				break;
+
+				// Reserva dos quartos.
 
 			case (cadReserva):
 				System.out.println("Reserva de quartos");
 				System.out.println("------------------");
 				System.out.println("Clientes cadastrados");
 				System.out.println("--------------------");
-				for (Cliente c : clienteCadastrado) {
+				for (Cliente c : clienteCadastrados) {
 					System.out.println(c.toString());
 				}
 				System.out.println();
 				System.out.print("Digite o Id do cliente para reserva: ");
 
 				int buscaId = input.nextInt();
-				for (Cliente c : clienteCadastrado) {
+				for (Cliente c : clienteCadastrados) {
 					if (buscaId == c.getIdCliente()) {
 						clienteReserva = c;
 						break;
@@ -304,7 +351,7 @@ public class Program {
 				break;
 			}
 
-		} while (menu != 8);
+		} while (menu != 10);
 
 		input.close();
 	}
