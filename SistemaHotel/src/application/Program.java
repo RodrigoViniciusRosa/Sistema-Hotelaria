@@ -22,12 +22,13 @@ public class Program {
 		Quarto novoQuarto = null;
 		Quarto quartoReserva = null;
 		Reserva novaReserva = null;
+		Quarto quartoParaEditar = null;
 
 		Scanner input = new Scanner(System.in);
 		
-		boolean quartoNaoCadastrado;
-		boolean quartoJaCadastrado;
-		int editQuarto;
+		
+		boolean quartoCadastrado;
+		int numeroEditQuarto;
 		int menu;
 		int numQuarto;
 		final int cadQuarto = 1;
@@ -41,7 +42,7 @@ public class Program {
 		final int sair = 9;
 		int tipoQuarto;
 		int id = 1;
-		int x = 0;
+		int editTipoQuarto;
 
 		// Lista de opções de quartos disponíveis.
 
@@ -82,19 +83,19 @@ public class Program {
 
 				do {
 
-					quartoJaCadastrado = false;
+					quartoCadastrado = false;
 
 					System.out.print("Digite o número do quarto para cadastro: ");
 					numQuarto = input.nextInt();
 					System.out.println();
 					for (Quarto q : quartosCadastrados) {
 						if (numQuarto == q.getNumero()) {
-							quartoJaCadastrado = true;
+							quartoCadastrado = true;
 							System.out.println("Número de quarto já cadastrado, por favor verifique o número digitado!");
 							System.out.println();
 						}
 					}
-				} while (quartoJaCadastrado);
+				} while (quartoCadastrado == true);
 
 				do {
 					System.out.println("Escolha o tipo do quarto para cadastro");
@@ -139,7 +140,7 @@ public class Program {
 			case (editQuartos):
 				do {
 					
-					quartoNaoCadastrado = false;
+					quartoCadastrado = false;
 					
 					System.out.println("Quartos cadastrados");
 					System.out.println("-------------------");
@@ -148,23 +149,58 @@ public class Program {
 					}
 					System.out.println();
 					System.out.print("Escolha o número do quarto a ser editado:");
-					editQuarto = input.nextInt();
+					
+					numeroEditQuarto = input.nextInt();
 					
 					for (Quarto q : quartosCadastrados) {
-						if (editQuarto != q.getNumero()) {
-							quartoNaoCadastrado = true;
+						if (numeroEditQuarto == q.getNumero()) {
+							quartoCadastrado = true;
+							quartoParaEditar = q;
 						}
 					}
-						if(quartoNaoCadastrado == true) {
+						
+						if(quartoCadastrado == false) {
+							System.out.println();
 							System.out.println("Quarto não cadastrado, verifique por favor!");
 							System.out.println();
+							
 						}else {
-							System.out.println("Deu certo");
-							System.out.println();
+							do {
+								System.out.println();
+								System.out.println("Escolha um novo tipo de quarto para cadastro");
+								System.out.println("--------------------------------------");
+								for (int i = 1; i < tiposQuarto.length; i++) {
+									System.out.println(i + " - " + tiposQuarto[i]);
+								}
+								editTipoQuarto = input.nextInt();
+								if (editTipoQuarto < 1 || editTipoQuarto > 6) {
+									System.out.println("Escolha um tipo de 1 a 6");
+									System.out.println();
+								}
+							} while (editTipoQuarto < 1 || editTipoQuarto > 6);
+							   
+							quartoParaEditar.setTipo(tiposQuarto[editTipoQuarto]);
+							
+							System.out.print("Digite uma nova descrição para o quarto:");
+							input.nextLine();
+							String editDescricaoQuarto = input.nextLine();
+							
+							
+							quartoParaEditar.setDescricao(editDescricaoQuarto);
+							
+							System.out.print("Digite um novo preço para o quarto:");
+							double editPrecoQuarto = input.nextDouble();
+							
+							quartoParaEditar.setPreco(editPrecoQuarto);
+							
+							for (Quarto q : quartosCadastrados) {
+								System.out.println(q.toString());
+							
+							}
 						}
 						
 					
-				} while (quartoNaoCadastrado == true);
+				} while (quartoCadastrado == false);
 				break;
 
 			// Cadastro de clientes.
