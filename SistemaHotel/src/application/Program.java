@@ -13,22 +13,25 @@ public class Program {
 	public static void main(String[] args) {
 
 		Reserva gerenciadorReservas = new Reserva();
+		Reserva acessReservaEfetuada = new Reserva();
 
 		List<Quarto> quartosCadastrados = new ArrayList<>();
 		List<Cliente> clienteCadastrados = new ArrayList<>();
+		List<Reserva> reservaEfetuada = acessReservaEfetuada.getReservaEfetuada();
 
 		Cliente cliente = null;
 		Cliente clienteReserva = null;
+		Cliente clienteParaEditar = null;
 		Quarto novoQuarto = null;
 		Quarto quartoReserva = null;
-		Reserva novaReserva = null;
 		Quarto quartoParaEditar = null;
-		Cliente clienteParaEditar = null;
+		Reserva novaReserva = null;
 
 		Scanner input = new Scanner(System.in);
 
 		boolean clienteCadastrado;
 		boolean quartoCadastrado;
+		boolean reservaEncontrada;
 		int numeroEditQuarto;
 		int menu;
 		int numQuarto;
@@ -44,6 +47,7 @@ public class Program {
 		final int sair = 10;
 		int tipoQuarto;
 		int id = 1;
+		int numReserva = 1;
 		int editTipoQuarto;
 
 		// Lista de opções de quartos disponíveis.
@@ -70,8 +74,8 @@ public class Program {
 				System.out.println(i + " - " + dadosMenu[i]);
 			menu = input.nextInt();
 
-			if (menu > 8) {
-				System.out.println("Escolha uma opção entre 1 e 8");
+			if (menu > 10) {
+				System.out.println("Escolha uma opção entre 1 e 10");
 				System.out.println();
 			}
 
@@ -256,7 +260,7 @@ public class Program {
 						if (idEditCliente == c.getIdCliente()) {
 							clienteCadastrado = true;
 							clienteParaEditar = c;
-							
+
 						}
 					}
 					if (clienteCadastrado == false) {
@@ -270,14 +274,14 @@ public class Program {
 				System.out.print("Digite um novo nome para cadastro: ");
 				input.nextLine();
 				String editNomeCliente = input.nextLine();
-				
+
 				System.out.println();
 
 				clienteParaEditar.setNomeCliente(editNomeCliente);
 
 				System.out.print("Digite um novo telefone para cadastro: ");
 				String edtiTelCliente = input.nextLine();
-				
+
 				System.out.println();
 
 				clienteParaEditar.setTelCliente(edtiTelCliente);
@@ -286,43 +290,68 @@ public class Program {
 				System.out.println();
 				break;
 
-				// Reserva dos quartos.
+			// Reserva dos quartos.
 
 			case (cadReserva):
 				System.out.println("Reserva de quartos");
 				System.out.println("------------------");
-				System.out.println("Clientes cadastrados");
-				System.out.println("--------------------");
-				for (Cliente c : clienteCadastrados) {
-					System.out.println(c.toString());
-				}
+
 				System.out.println();
-				System.out.print("Digite o Id do cliente para reserva: ");
+				System.out.println("Reserva: " + numReserva);
 
-				int buscaId = input.nextInt();
-				for (Cliente c : clienteCadastrados) {
-					if (buscaId == c.getIdCliente()) {
-						clienteReserva = c;
-						break;
-
+				do {
+					System.out.println("Clientes cadastrados");
+					System.out.println("--------------------");
+					for (Cliente c : clienteCadastrados) {
+						System.out.println(c.toString());
 					}
-				}
+					System.out.println();
 
-				System.out.println("Quartos cadastrados");
-				System.out.println("-------------------");
-				for (Quarto q : quartosCadastrados) {
-					System.out.println(q.toString());
-				}
-				System.out.println();
-				System.out.print("Escolha o número quarto a ser reservado: ");
+					clienteCadastrado = false;
+					System.out.print("Digite o Id do cliente para reserva: ");
+					int idEditCliente = input.nextInt();
+					for (Cliente c : clienteCadastrados) {
+						if (idEditCliente == c.getIdCliente()) {
+							clienteCadastrado = true;
+							clienteReserva = c;
 
-				int buscaNumeroQuarto = input.nextInt();
-				for (Quarto q : quartosCadastrados) {
-					if (buscaNumeroQuarto == q.getNumero()) {
-						quartoReserva = q;
-						break;
+						}
 					}
-				}
+					if (clienteCadastrado == false) {
+						System.out.println();
+						System.out.println("Id do cliente não cadastrado, verifique por favor!");
+						System.out.println();
+					}
+
+				} while (clienteCadastrado == false);
+
+				do {
+
+					quartoCadastrado = false;
+
+					System.out.println("Quartos cadastrados");
+					System.out.println("-------------------");
+					for (Quarto q : quartosCadastrados) {
+						System.out.println(q.toString());
+					}
+					System.out.println();
+					System.out.print("Escolha o número do quarto a ser editado:");
+
+					numeroEditQuarto = input.nextInt();
+
+					for (Quarto q : quartosCadastrados) {
+						if (numeroEditQuarto == q.getNumero()) {
+							quartoCadastrado = true;
+							quartoReserva = q;
+						}
+					}
+
+					if (quartoCadastrado == false) {
+						System.out.println();
+						System.out.println("Quarto não cadastrado, verifique por favor!");
+						System.out.println();
+					}
+				} while (quartoCadastrado == false);
 
 				System.out.println();
 				System.out.print("Digite a data de inicio da reserva (dd/mm/aaaa): ");
@@ -332,12 +361,13 @@ public class Program {
 				System.out.print("Digite a data final da reserva (dd/mm/aaaa): ");
 				String dataFinal = input.nextLine();
 
-				novaReserva = new Reserva(dataInicial, dataFinal, quartoReserva, clienteReserva);
+				novaReserva = new Reserva(numReserva, dataInicial, dataFinal, quartoReserva, clienteReserva);
 				gerenciadorReservas.addReserva(novaReserva);
 
+				numReserva++;
+
 				System.out.println();
-				System.out.println("Reserva: " + clienteReserva.getNomeCliente() + ", Quarto: "
-						+ quartoReserva.getNumero() + ", cadastrada com sucesso!");
+				System.out.println(novaReserva.toString() + ", Cadastrada com sucesso!");
 				System.out.println();
 				break;
 
@@ -349,10 +379,40 @@ public class Program {
 				gerenciadorReservas.listReservas();
 				System.out.println();
 				break;
+
+			// Cancelar reserva.
+
+			case (canReserva):
+				do {
+					System.out.println("Reservas cadastradas");
+					System.out.println("--------------------");
+					gerenciadorReservas.listReservas();
+					System.out.println();
+					System.out.print("Digite o número da reserva a ser cancelada:");
+					int delReserva = input.nextInt();
+					reservaEncontrada = false;
+					for (Reserva r : reservaEfetuada) {
+						if (delReserva == r.getNumReserva()) {
+							reservaEncontrada = true;
+							reservaEfetuada.remove(delReserva);
+						} else {
+							System.out.println("Número de reserva não encontrado, verifique por favor!");
+						}
+					}
+				} while (reservaEncontrada);
+				break;
+
+			// Finalizar o programa.
+			
+			case (sair):
+				System.out.println();
+				System.out.println("Programa finalizado com sucesso!");
+
 			}
 
 		} while (menu != 10);
 
 		input.close();
 	}
+
 }

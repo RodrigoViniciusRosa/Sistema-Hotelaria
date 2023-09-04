@@ -2,6 +2,7 @@ package entities;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class Reserva {
 	Quarto quarto;
 	Cliente cliente;
 
+	int numReserva;
 	LocalDate inicioReserva;
 	LocalDate finalReserva;
 
@@ -22,8 +24,9 @@ public class Reserva {
 
 	}
 
-	public Reserva(String dataInicial, String dataFinal, Quarto quarto, Cliente cliente) {
+	public Reserva(int numReserva, String dataInicial, String dataFinal, Quarto quarto, Cliente cliente) {
 		super();
+		this.numReserva = numReserva;
 		this.dataInicial = dataInicial;
 		this.dataFinal = dataFinal;
 		this.quarto = quarto;
@@ -83,9 +86,25 @@ public class Reserva {
 	public void addReserva(Reserva add) {
 		reservaEfetuada.add(add);
 	}
+	
+	public void delReserva(Reserva del) {
+		reservaEfetuada.remove(del);
+	}
+
+	public List<Reserva> getReservaEfetuada() {
+		return reservaEfetuada;
+	}
+
+	public int getNumReserva() {
+		return numReserva;
+	}
+
+	public void setNumReserva(int numReserva) {
+		this.numReserva = numReserva;
+	}
 
 	public String toString() {
-		return "Reserva do quarto: " + quarto.getNumero() + ", Cliente: " + cliente.getNomeCliente() + ", Check in: "
+		return "Reserva número: " + numReserva + ", Quarto: " +  quarto.getNumero() + ", Cliente: " + cliente.getNomeCliente() + ", Check in: "
 				+ dataInicial + ", Check out: " + dataFinal;
 
 	}
@@ -94,6 +113,14 @@ public class Reserva {
 		for (Reserva r : reservaEfetuada) {
 			System.out.println(r.toString());
 		}
+	}
+	
+	public long diasReserva() {
+		return ChronoUnit.DAYS.between(inicioReserva, finalReserva);
+	}
+	
+	public double calculoReserva() {
+		return diasReserva() * quarto.getPreco();
 	}
 
 }
